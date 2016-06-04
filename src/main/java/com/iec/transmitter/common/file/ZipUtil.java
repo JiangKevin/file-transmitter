@@ -1,4 +1,4 @@
-package com.iec.transmitter.common;
+package com.iec.transmitter.common.file;
 
 import com.iec.transmitter.common.exception.TransmitterZipException;
 import org.apache.logging.log4j.LogManager;
