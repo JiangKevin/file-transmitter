@@ -1,10 +1,15 @@
 package com.iec.transmitter.client;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Client {
 
+    private static final Logger log = LogManager.getLogger(Client.class);
+
     public static void main (String[] args) {
-        System.out.println("Client starting...");
+        log.trace("Client starting...");
 
     }
 

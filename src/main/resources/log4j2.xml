@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+        </Console>
+
+        <RollingFile name="ServerFile" filename="log/server.log"
+                     filepattern="${logPath}/%d{MMddHHmmss}-fargo.log">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <RollingFile name="ClientFile" filename="log/client.log"
+                     filepattern="${logPath}/%d{MMddHHmmss}-fargo.log">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <RollingFile name="RollingFile" filename="log/global.log"
+                     filepattern="${logPath}/%d{MMddHHmmss}-fargo.log">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="com.iec.transmitter.server" level="trace">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="ServerFile" />-->
+        </Logger>
+        <Logger name="com.iec.transmitter.client" level="trace">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="ClientFile" />-->
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="RollingFile" />-->
+        </Root>
+    </Loggers>
+
+
+</Configuration>
