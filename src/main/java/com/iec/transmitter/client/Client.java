@@ -8,7 +8,7 @@ public class Client {
 
     private static final Logger log = LogManager.getLogger(Client.class);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         log.trace("Client starting...");
 
     }

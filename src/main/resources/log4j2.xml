@@ -41,6 +41,10 @@
             <AppenderRef ref="Console" />
             <!--<AppenderRef ref="ClientFile" />-->
         </Logger>
+        <Logger name="com.iec.transmitter.common" level="trace">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="ClientFile" />-->
+        </Logger>
         <Root level="info">
             <!--<AppenderRef ref="Console" />-->
             <!--<AppenderRef ref="RollingFile" />-->
