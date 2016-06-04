@@ -1,6 +1,7 @@
 package com.iec.transmitter.client;
 
 
+import com.iec.transmitter.common.FileHandler;
 import com.iec.transmitter.common.exception.CryptoException;
 import com.iec.transmitter.common.exception.TransmitterZipException;
 import com.iec.transmitter.common.file.CryptoUtil;
@@ -20,27 +21,25 @@ public class Client {
 
     private static final Logger log = LogManager.getLogger(Client.class);
 
-    public static void main(String[] args) throws CryptoException, TransmitterZipException, URISyntaxException {
+    public static void main(String[] args) throws CryptoException, TransmitterZipException, URISyntaxException, IOException {
         log.trace("Client starting...");
 
-        Path fileToSend = Paths.get(getSystemResource("fileToSend").toURI());
+        log.trace("Will send file: " + args[0]);
 
-        Path encryptedFile = Paths.get("pathToEncryptedFile");
-        CryptoUtil.encrypt(fileToSend, encryptedFile);
+        Path fileToSend = Paths.get(args[0]);
 
-        Path zippedFile = ZipUtil.zip(encryptedFile);
+        log.debug("initial size: "+ Files.readAllBytes(fileToSend).length);
 
-        //build payload
+        //TODO: need to make sure that when several files are to be transmitted, if something fails, should continue gracefully
+        //TODO: add some try - catch blocks
 
-        //encode payload
+        Path fileReadyToSend = FileHandler.prepareFileForSending(fileToSend);
 
-        //send message(s)
+        log.debug("file Ready to send: " + fileReadyToSend);
+        log.debug("final size: "+Files.readAllBytes(fileReadyToSend).length);
 
-        try {
-            Files.delete(encryptedFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //getList of APDUs
+        //send
 
     }
 

@@ -25,11 +25,18 @@ public class ZipUtil {
      * @param fileToZip - the {@link Path} to the file that is to be zipped
      * @return the {@link Path} to the resulting zip
      */
-    public static Path zip(Path fileToZip) throws TransmitterZipException {
+    public static Path zip(Path fileToZip, String newFileName) throws TransmitterZipException, IOException {
 
         log.debug("Zipping the file " + fileToZip);
 
-        Path zipPath = Paths.get(System.getProperty("java.io.tmpdir"), fileToZip.getFileName().toString());
+        String tempDir = "/Users/radumacovei/projects/file-transmitter/data/client-data";
+//        String tempDir = System.getProperty("java.io.tmpdir");
+
+        Path zipPath = Paths.get(tempDir, newFileName);
+
+        if(Files.exists(zipPath)) {
+            Files.delete(zipPath);
+        }
 
         ZipOutputStream zos = null;
 

@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class Decoder {
 
-    public static Asdu decodeAsdu(DataInputStream is, int aSduLength) throws IOException {
+    private static Asdu decodeAsdu(DataInputStream is, int aSduLength) throws IOException {
 
         Asdu asdu = new Asdu();
 
@@ -45,7 +45,7 @@ public class Decoder {
         return asdu;
     }
 
-    public Apdu decodeApdu(DataInputStream is) throws IOException {
+    public static Apdu decodeApdu(DataInputStream is) throws IOException {
 
         Apdu apdu = new Apdu();
 

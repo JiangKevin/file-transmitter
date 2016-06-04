@@ -8,5 +8,5 @@ import java.io.File;
 public class Constants {
     public static String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
 
-    public static String KEY = "Mary has one cat1";
+    public static String KEY = "Mary has one cat1_23^&D1";
 }
