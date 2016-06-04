@@ -83,5 +83,7 @@ public class Decoder {
                 apdu.setApciType(APCI_TYPE.STARTDT_ACT);
             }
         }
+
+        return apdu;
     }
 }
