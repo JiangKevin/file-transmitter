@@ -99,4 +99,36 @@ public class Apdu implements Encodable {
         return length + 2;
     }
 
+    @Override
+    public String toString() {
+        return "Apdu{" +
+                "sendSeqNum=" + sendSeqNum +
+                ", receiveSeqNum=" + receiveSeqNum +
+                ", apciType=" + apciType +
+                ", asdu=" + asdu +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Apdu)) return false;
+
+        Apdu apdu = (Apdu) o;
+
+        if (sendSeqNum != apdu.sendSeqNum) return false;
+        if (receiveSeqNum != apdu.receiveSeqNum) return false;
+        if (apciType != apdu.apciType) return false;
+        return asdu.equals(apdu.asdu);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sendSeqNum;
+        result = 31 * result + receiveSeqNum;
+        result = 31 * result + apciType.hashCode();
+        result = 31 * result + asdu.hashCode();
+        return result;
+    }
 }

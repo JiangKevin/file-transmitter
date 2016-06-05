@@ -135,7 +135,7 @@ public class Asdu implements Encodable {
 
         System.arraycopy(informationObject, 0, buffer, i, informationObject.length);
 
-        return i - origi;
+        return (i+informationObject.length) - origi;
     }
 
     public void decode(DataInputStream is, int aSduLength) throws IOException {
@@ -164,5 +164,53 @@ public class Asdu implements Encodable {
 
         informationObject = new byte[aSduLength - 4];
         is.readFully(informationObject);
+    }
+
+    @Override
+    public String toString() {
+        return "Asdu{" +
+                "typeId=" + typeId +
+                ", isSequenceOfElements=" + isSequenceOfElements +
+                ", causeOfTransmission=" + causeOfTransmission +
+                ", test=" + test +
+                ", negativeConfirm=" + negativeConfirm +
+                ", originatorAddress=" + originatorAddress +
+                ", commonAddress=" + commonAddress +
+                ", sequenceLength=" + sequenceLength +
+                ", informationObject=" + Arrays.toString(informationObject) +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Asdu)) return false;
+
+        Asdu asdu = (Asdu) o;
+
+        if (isSequenceOfElements != asdu.isSequenceOfElements) return false;
+        if (test != asdu.test) return false;
+        if (negativeConfirm != asdu.negativeConfirm) return false;
+        if (originatorAddress != asdu.originatorAddress) return false;
+        if (commonAddress != asdu.commonAddress) return false;
+        if (sequenceLength != asdu.sequenceLength) return false;
+        if (typeId != asdu.typeId) return false;
+        if (causeOfTransmission != asdu.causeOfTransmission) return false;
+        return Arrays.equals(informationObject, asdu.informationObject);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = typeId.hashCode();
+        result = 31 * result + (isSequenceOfElements ? 1 : 0);
+        result = 31 * result + causeOfTransmission.hashCode();
+        result = 31 * result + (test ? 1 : 0);
+        result = 31 * result + (negativeConfirm ? 1 : 0);
+        result = 31 * result + originatorAddress;
+        result = 31 * result + commonAddress;
+        result = 31 * result + sequenceLength;
+        result = 31 * result + Arrays.hashCode(informationObject);
+        return result;
     }
 }

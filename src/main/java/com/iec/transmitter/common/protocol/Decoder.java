@@ -3,6 +3,8 @@ package com.iec.transmitter.common.protocol;
 import com.iec.transmitter.common.protocol.constants.APCI_TYPE;
 import com.iec.transmitter.common.protocol.constants.CauseOfTransmission;
 import com.iec.transmitter.common.protocol.constants.TypeId;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -11,6 +13,8 @@ import java.io.IOException;
  * Created by radumacovei on 04/06/16.
  */
 public class Decoder {
+
+    private static Logger log = LogManager.getLogger(Decoder.class);
 
     private static Asdu decodeAsdu(DataInputStream is, int aSduLength) throws IOException {
 
@@ -48,6 +52,12 @@ public class Decoder {
     public static Apdu decodeApdu(DataInputStream is) throws IOException {
 
         Apdu apdu = new Apdu();
+
+        byte startByte = is.readByte();
+
+        if(startByte != 0x68) {
+            log.error("invalid start bit!");
+        }
 
         int length = is.readByte() & 0xff;
 
