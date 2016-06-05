@@ -6,15 +6,18 @@ import com.iec.transmitter.common.FileHandler;
 import com.iec.transmitter.common.exception.CryptoException;
 import com.iec.transmitter.common.exception.TransmitterZipException;
 import com.iec.transmitter.common.protocol.Apdu;
+import com.iec.transmitter.common.protocol.Decoder;
 import com.iec.transmitter.common.protocol.ProtocolHelper;
+import com.iec.transmitter.common.protocol.constants.APCI_TYPE;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +29,7 @@ public class Client {
 
     private static final Logger log = LogManager.getLogger(Client.class);
 
-    public static void main(String[] args) throws CryptoException, TransmitterZipException, URISyntaxException, IOException {
+    public static void main(String[] args) throws CryptoException, TransmitterZipException, URISyntaxException, IOException, InterruptedException {
         log.trace("Client starting...");
 
         log.trace("Will send file: " + args[0]);
@@ -41,30 +44,42 @@ public class Client {
         Path fileReadyToSend = FileHandler.prepareFileForSending(fileToSend);
 
         log.debug("file Ready to send: " + fileReadyToSend);
-        log.debug("final size: "+Files.readAllBytes(fileReadyToSend).length);
+        log.error("final size: "+Files.readAllBytes(fileReadyToSend).length);
 
         //getList of APDUs
 
         List<byte[]> dataSegments = FileHandler.getDataSegments(fileReadyToSend);
 
         List<Apdu> dataToSend = ProtocolHelper.getApduList(dataSegments);
+        Apdu endSignal = new Apdu(APCI_TYPE.S_FORMAT);
+        dataToSend.add(endSignal);
 
         //send
 
-        Socket clientSocket = new Socket("127.0.0.1", Constants.PORT);
+        InetSocketAddress socketAddress = new InetSocketAddress("localhost", Constants.PORT);
+        SocketChannel socketChannel = SocketChannel.open(socketAddress);
 
-        OutputStream out = clientSocket.getOutputStream();
+        for (Apdu apdu : dataToSend) {
 
-        for(Apdu apdu: dataToSend) {
-            byte[] buffer = new byte[255];
-            int length = apdu.encode(buffer, 0);
-            out.write(buffer, 0, length);
-            out.flush();
+            byte[] initialBuffer = new byte[256];
+            int length = apdu.encode(initialBuffer,0);
+
+//            Apdu apduDecoded = Decoder.decodeApdu(new DataInputStream(new ByteArrayInputStream(initialBuffer)));
+
+            byte [] bufferArray = Arrays.copyOf(initialBuffer, length);
+
+            ByteBuffer buffer = ByteBuffer.wrap(bufferArray);
+            socketChannel.write(buffer);
+
+            log.debug("sent data length = "+length);
+
+//            log("sending: " + apdu);
+            buffer.clear();
+
+            // wait for 2 seconds before sending next message
+            Thread.sleep(2000);
         }
-
-        out.close();
-
-        clientSocket.close();
+        socketChannel.close();
     }
 
 }
