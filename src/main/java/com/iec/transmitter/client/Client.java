@@ -10,7 +10,10 @@ import com.iec.transmitter.common.protocol.ProtocolHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +51,20 @@ public class Client {
 
         //send
 
+        Socket clientSocket = new Socket("127.0.0.1", Constants.PORT);
+
+        OutputStream out = clientSocket.getOutputStream();
+
+        for(Apdu apdu: dataToSend) {
+            byte[] buffer = new byte[255];
+            int length = apdu.encode(buffer, 0);
+            out.write(buffer, 0, length);
+            out.flush();
+        }
+
+        out.close();
+
+        clientSocket.close();
     }
 
 }
