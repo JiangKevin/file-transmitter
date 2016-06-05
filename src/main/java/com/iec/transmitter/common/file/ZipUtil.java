@@ -45,6 +45,8 @@ public class ZipUtil {
             log.debug("empty zip file created: " + zipPath);
 
             zos = new ZipOutputStream(new BufferedOutputStream(Files.newOutputStream(zipPath)));
+
+            log.debug("adding the entry: "+fileToZip.getFileName().toString());
             ZipEntry entry = new ZipEntry(fileToZip.getFileName().toString());
 
             zos.putNextEntry(entry);
