@@ -5,6 +5,7 @@ import com.iec.transmitter.common.protocol.constants.TypeId;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by radumacovei on 04/06/16.
@@ -25,6 +26,10 @@ public class Asdu implements Encodable {
     private byte[] informationObject;
 
     public Asdu() {
+    }
+
+    public Asdu(byte [] data) {
+        this.informationObject = data;
     }
 
     public TypeId getTypeId() {

@@ -1,11 +1,12 @@
 package com.iec.transmitter.client;
 
 
+import com.iec.transmitter.common.Constants;
 import com.iec.transmitter.common.FileHandler;
 import com.iec.transmitter.common.exception.CryptoException;
 import com.iec.transmitter.common.exception.TransmitterZipException;
-import com.iec.transmitter.common.file.CryptoUtil;
-import com.iec.transmitter.common.file.ZipUtil;
+import com.iec.transmitter.common.protocol.Apdu;
+import com.iec.transmitter.common.protocol.ProtocolHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +15,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static java.lang.ClassLoader.getSystemResource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client {
 
@@ -39,6 +41,11 @@ public class Client {
         log.debug("final size: "+Files.readAllBytes(fileReadyToSend).length);
 
         //getList of APDUs
+
+        List<byte[]> dataSegments = FileHandler.getDataSegments(fileReadyToSend);
+
+        List<Apdu> dataToSend = ProtocolHelper.getApduList(dataSegments);
+
         //send
 
     }

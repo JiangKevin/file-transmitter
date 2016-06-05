@@ -18,6 +18,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by radumacovei on 04/06/16.
@@ -66,6 +69,31 @@ public class FileHandler {
 
         return encryptedFile;
 
+    }
+
+    public static List<byte[]> getDataSegments(Path fileToSend) throws IOException {
+        List<byte []> dataSegments = new ArrayList<>();
+
+        byte[] fileData = Files.readAllBytes(fileToSend);
+
+        int len = fileData.length;
+
+        for (int i = 0; i < len - Constants.CHUNK_SIZE + 1; i += Constants.CHUNK_SIZE) {
+            dataSegments.add(Arrays.copyOfRange(fileData, i, i + Constants.CHUNK_SIZE));
+
+        }
+
+        if (len % Constants.CHUNK_SIZE != 0) {
+            dataSegments.add(Arrays.copyOfRange(fileData, len - len % Constants.CHUNK_SIZE, len));
+        }
+
+        log.debug("Found chunks: "+ dataSegments.size());
+
+        for(int i=0; i<dataSegments.size(); i++) {
+            log.debug("chunk "+i+" has "+ dataSegments.get(i).length+ " elements");
+        }
+
+        return dataSegments;
     }
 
     private static String getFileNameWithExtension(String oldFileName, String extension) {

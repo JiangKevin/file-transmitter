@@ -27,6 +27,10 @@ public class Apdu implements Encodable {
         this.asdu = asdu;
     }
 
+    public Apdu(APCI_TYPE apci_type) {
+        this.apciType = apci_type;
+    }
+
     public Asdu getAsdu() {
         return asdu;
     }
